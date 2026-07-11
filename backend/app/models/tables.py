@@ -126,6 +126,10 @@ class Story(TimestampMixin, Base):
     headline: Mapped[str] = mapped_column(Text, nullable=False)
     domain: Mapped[str] = mapped_column(String(40), nullable=False)
     event_status: Mapped[str] = mapped_column(String(48), nullable=False)
+    origin_location: Mapped[str] = mapped_column(String(240), nullable=False, default="Unknown")
+    prominence_reasons: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    themes: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    entities: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
     published_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     fixture: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
@@ -142,6 +146,7 @@ class StorySource(Base):
     url: Mapped[str] = mapped_column(Text, nullable=False)
     excerpt: Mapped[str] = mapped_column(Text, nullable=False)
     independent_group: Mapped[str] = mapped_column(String(160), nullable=False)
+    paywalled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
 
 class StoryNodeMatch(Base):

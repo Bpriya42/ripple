@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+from alembic import context
+from app import models  # noqa: F401
 from app.core.config import database_url
 from app.db.base import Base
-from app import models  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", database_url().replace("%", "%%"))

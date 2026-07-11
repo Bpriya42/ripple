@@ -21,12 +21,17 @@ and report exact results.
 
 ```powershell
 uv sync --project backend --extra dev
-uv run --project backend ruff format --check backend/app backend/tests scripts
-uv run --project backend ruff check backend/app backend/tests scripts
+uv run --project backend ruff format --check backend/app backend/alembic backend/tests scripts
+uv run --project backend ruff check backend/app backend/alembic backend/tests scripts
 uv run --project backend mypy backend/app scripts
 uv run --project backend pytest -v
 uv run --project backend alembic -c backend/alembic.ini upgrade head
 uv run --project backend python scripts/import_graph.py
+uv run --project backend python scripts/import_story_fixtures.py
+uv run --project backend python scripts/bootstrap_milestone1.py
+uv run --project backend python scripts/export_openapi.py
+uv run --project backend python -m app.jobs.ingest --run-key fixture-manual-v1
+uv run --project backend uvicorn app.main:app --reload
 uv run --project backend python scripts/ripple_from_headline.py --fixture threat_only_hormuz
 uv run --project backend python scripts/bootstrap_milestone0.py
 docker compose up -d postgres

@@ -21,8 +21,8 @@ and the unmet material-disruption condition for the threat-only fixture.
 ## Focused checks
 
 ```powershell
-uv run --project backend ruff format --check backend/app backend/tests scripts
-uv run --project backend ruff check backend/app backend/tests scripts
+uv run --project backend ruff format --check backend/app backend/alembic backend/tests scripts
+uv run --project backend ruff check backend/app backend/alembic backend/tests scripts
 uv run --project backend mypy backend/app scripts
 docker compose config
 ```

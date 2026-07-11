@@ -8,7 +8,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
 from app.db.session import build_engine
-from app.models import Edge, EdgeEvidence, EvidenceSource, Node, NodeAlias
+from app.models import Edge, EdgeEvidence, EvidenceSource, Node, NodeAlias, RippleCache
 from app.services.graph import load_graph
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,6 +128,7 @@ def import_graph(path: Path = DEFAULT_GRAPH) -> tuple[int, int, int]:
                         supports=True,
                     )
                 )
+        session.execute(delete(RippleCache))
     return len(graph.nodes), len(graph.edges), len(graph.evidence_sources)
 
 

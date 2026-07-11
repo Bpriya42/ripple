@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from enum import StrEnum
 from typing import Any
 
@@ -93,11 +94,27 @@ class GraphFixture(StrictModel):
         return self
 
 
+class FixtureStorySource(StrictModel):
+    outlet: str
+    url: HttpUrl
+    excerpt: str
+    independent_group: str
+    paywalled: bool = False
+
+
 class FixtureStory(StrictModel):
     fixture: bool
     id: str
     headline: str
+    published_at: datetime
+    domain: str
+    origin_location: str
+    prominence_reasons: list[str]
+    themes: list[str]
+    entities: list[str]
+    sources: list[FixtureStorySource] = Field(min_length=1)
     event_status: str
     mapped_node: str
+    match_score: float = Field(ge=0, le=1)
     condition_met: bool
     direct_outcome_evidence: bool = False

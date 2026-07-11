@@ -6,22 +6,29 @@ engine. The canonical specification is [Master Build Plan.md](Master%20Build%20P
 and the implementation contract is
 [RIPPLE_COMPLETE_BUILD_HANDOFF.md](RIPPLE_COMPLETE_BUILD_HANDOFF.md).
 
-## Milestone 0
+## Local backend
 
-Requirements: Python 3.12+, `uv`, Docker, and Docker Compose. Node.js/npm are
-needed only for the frontend tooling checks; Milestone 0 does not contain UI.
+Requirements: Python 3.12+, `uv`, Docker, and Docker Compose. Milestone 1 serves
+explicitly marked fixtures through the deterministic FastAPI backend; it does
+not perform live ingestion or invoke an LLM.
 
 ```powershell
 Copy-Item .env.example .env
 uv sync --project backend --extra dev
-uv run --project backend python scripts/bootstrap_milestone0.py
-uv run --project backend python scripts/ripple_from_headline.py --fixture threat_only_hormuz
+uv run --project backend python scripts/bootstrap_milestone1.py
+uv run --project backend uvicorn app.main:app --reload
+```
+
+In another shell:
+
+```powershell
+Invoke-RestMethod "http://127.0.0.1:8000/feed?domain=energy&limit=10"
+Invoke-RestMethod "http://127.0.0.1:8000/story/story.fixture.threat_only_hormuz/ripples"
 uv run --project backend pytest -v
 ```
 
-`bootstrap_milestone0.py` is the acceptance-gate setup command: it starts the
-local PostgreSQL service, applies migrations, and idempotently imports the
-fixture graph. See `docs/milestone_0.md` for the exact gate and troubleshooting.
+`bootstrap_milestone1.py` starts PostgreSQL, applies migrations, and
+idempotently imports the graph and story fixtures. The generated API contract
+is available at `/openapi.json` and checked in at `docs/openapi.json`.
 
-The graph and story records used by the spike are explicitly marked fixtures.
-No external service or LLM is invoked.
+See `docs/milestone_1.md` for the acceptance gate and cron-fixture command.

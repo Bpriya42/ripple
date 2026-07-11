@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  milestone-0:
+  milestone-1:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -37,13 +37,22 @@ jobs:
       - run: uv sync --project backend --extra dev
       - run: uv run --project backend alembic -c backend/alembic.ini upgrade head
       - run: uv run --project backend python scripts/import_graph.py
-      - run: uv run --project backend ruff format --check backend/app backend/tests scripts
-      - run: uv run --project backend ruff check backend/app backend/tests scripts
+      - run: uv run --project backend python scripts/import_story_fixtures.py
+      - run: uv run --project backend python scripts/export_openapi.py
+      - run: git diff --exit-code docs/openapi.json
+      - run: uv run --project backend ruff format --check backend/app backend/alembic backend/tests scripts
+      - run: uv run --project backend ruff check backend/app backend/alembic backend/tests scripts
       - run: uv run --project backend mypy backend/app scripts
       - run: uv run --project backend pytest -v
-      - run: npm ci --prefix frontend
-      - run: npm --prefix frontend run format:check
-      - run: npm --prefix frontend run lint
-      - run: npm --prefix frontend run typecheck
-      - run: npm --prefix frontend run test
-      - run: npm --prefix frontend run build
+      - run: npm ci
+        working-directory: frontend
+      - run: npm run format:check
+        working-directory: frontend
+      - run: npm run lint
+        working-directory: frontend
+      - run: npm run typecheck
+        working-directory: frontend
+      - run: npm run test
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend

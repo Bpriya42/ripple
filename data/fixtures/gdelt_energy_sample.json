@@ -1,0 +1,19 @@
+{
+  "fixture": true,
+  "articles": [
+    {
+      "fixture_id": "mock-gas-threat",
+      "title": "operators warn of possible gas-delivery disruption",
+      "seendate": "2026-07-10T14:00:00Z",
+      "sourcecountry": "Fixture Region",
+      "themes": ["ENERGY_SECURITY", "NATURAL_GAS"],
+      "entities": ["Fixture Gas Network"],
+      "domain": "fixture.invalid",
+      "url": "https://fixture.invalid/gdelt/mock-gas-threat",
+      "excerpt": "Operators warn of a possible disruption, while the fixture states that material supply loss has not been confirmed.",
+      "mapped_node": "event.gas_supply_disruption",
+      "event_status": "threat_only",
+      "condition_met": false
+    }
+  ]
+}

@@ -9,13 +9,16 @@ description = "Ripple deterministic causal-publication spike"
 requires-python = ">=3.12"
 dependencies = [
   "alembic>=1.14,<2",
+  "fastapi>=0.116,<1",
   "psycopg[binary]>=3.2,<4",
   "pydantic>=2.10,<3",
   "sqlalchemy>=2.0.36,<3",
+  "uvicorn>=0.35,<1",
 ]
 
 [project.optional-dependencies]
 dev = [
+  "httpx2>=2,<3",
   "mypy>=1.14,<2",
   "pytest>=8.3,<9",
   "ruff>=0.9,<1",

@@ -3,8 +3,24 @@
     "fixture": true,
     "id": "story.fixture.threat_only_hormuz",
     "headline": "Fixture: officials threaten to close the Strait of Hormuz",
+    "published_at": "2026-07-10T18:00:00Z",
+    "domain": "energy",
+    "origin_location": "Strait of Hormuz",
+    "prominence_reasons": ["fixture", "high cross-border relevance", "strong curated mechanism coverage"],
+    "themes": ["energy security", "maritime chokepoint"],
+    "entities": ["Strait of Hormuz"],
+    "sources": [
+      {
+        "outlet": "Fixture Energy Wire",
+        "url": "https://fixture.invalid/stories/threat-only-hormuz",
+        "excerpt": "Officials threatened a closure, while the fixture states that transit remains open and no material disruption is confirmed.",
+        "independent_group": "fixture_energy_wire",
+        "paywalled": false
+      }
+    ],
     "event_status": "threat_only",
     "mapped_node": "event.hormuz_disruption",
+    "match_score": 1.0,
     "condition_met": false,
     "direct_outcome_evidence": false
   },
@@ -12,8 +28,88 @@
     "fixture": true,
     "id": "story.fixture.confirmed_hormuz_disruption",
     "headline": "Fixture: material disruption to Hormuz transit is confirmed",
+    "published_at": "2026-07-10T17:00:00Z",
+    "domain": "energy",
+    "origin_location": "Strait of Hormuz",
+    "prominence_reasons": ["fixture", "confirmed disruption", "high cross-border relevance"],
+    "themes": ["energy security", "shipping disruption"],
+    "entities": ["Strait of Hormuz"],
+    "sources": [
+      {
+        "outlet": "Fixture Maritime Desk",
+        "url": "https://fixture.invalid/stories/confirmed-hormuz-a",
+        "excerpt": "The fixture reports a material disruption to oil transit through the Strait of Hormuz.",
+        "independent_group": "fixture_maritime_desk",
+        "paywalled": false
+      },
+      {
+        "outlet": "Fixture Shipping Monitor",
+        "url": "https://fixture.invalid/stories/confirmed-hormuz-b",
+        "excerpt": "The fixture independently confirms that normal oil transit has been materially disrupted.",
+        "independent_group": "fixture_shipping_monitor",
+        "paywalled": false
+      },
+      {
+        "outlet": "Fixture Port Bulletin",
+        "url": "https://fixture.invalid/stories/confirmed-hormuz-c",
+        "excerpt": "The fixture independently records a material reduction in transit through the strait.",
+        "independent_group": "fixture_port_bulletin",
+        "paywalled": false
+      }
+    ],
     "event_status": "disruption_confirmed",
     "mapped_node": "event.hormuz_disruption",
+    "match_score": 1.0,
+    "condition_met": true,
+    "direct_outcome_evidence": false
+  },
+  "confirmed_gas_disruption": {
+    "fixture": true,
+    "id": "story.fixture.confirmed_gas_disruption",
+    "headline": "Fixture: regional natural-gas deliveries are materially disrupted",
+    "published_at": "2026-07-10T16:00:00Z",
+    "domain": "energy",
+    "origin_location": "Fixture Region",
+    "prominence_reasons": ["fixture", "confirmed disruption", "multiple supported pathways"],
+    "themes": ["natural gas", "energy security"],
+    "entities": ["Fixture Gas Network"],
+    "sources": [
+      {
+        "outlet": "Fixture Gas Monitor",
+        "url": "https://fixture.invalid/stories/gas-disruption",
+        "excerpt": "The fixture confirms a material loss of natural-gas deliveries in a market with limited immediate substitution.",
+        "independent_group": "fixture_gas_monitor",
+        "paywalled": false
+      }
+    ],
+    "event_status": "disruption_confirmed",
+    "mapped_node": "event.gas_supply_disruption",
+    "match_score": 1.0,
+    "condition_met": true,
+    "direct_outcome_evidence": false
+  },
+  "confirmed_shipping_disruption": {
+    "fixture": true,
+    "id": "story.fixture.confirmed_shipping_disruption",
+    "headline": "Fixture: shipping disruption forces material rerouting",
+    "published_at": "2026-07-10T15:00:00Z",
+    "domain": "energy",
+    "origin_location": "Fixture Shipping Corridor",
+    "prominence_reasons": ["fixture", "confirmed rerouting", "cross-border supply-chain relevance"],
+    "themes": ["shipping", "supply chains"],
+    "entities": ["Fixture Shipping Corridor"],
+    "sources": [
+      {
+        "outlet": "Fixture Shipping Wire",
+        "url": "https://fixture.invalid/stories/shipping-disruption",
+        "excerpt": "The fixture confirms that a route disruption is forcing rerouting and removing effective shipping capacity.",
+        "independent_group": "fixture_shipping_wire",
+        "paywalled": false
+      }
+    ],
+    "event_status": "disruption_confirmed",
+    "mapped_node": "event.shipping_disruption",
+    "match_score": 1.0,
     "condition_met": true,
     "direct_outcome_evidence": false
   }

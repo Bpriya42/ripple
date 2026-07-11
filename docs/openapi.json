@@ -1,0 +1,1105 @@
+{
+  "components": {
+    "schemas": {
+      "Certainty": {
+        "enum": [
+          "established",
+          "emerging",
+          "speculative"
+        ],
+        "title": "Certainty",
+        "type": "string"
+      },
+      "ClaimState": {
+        "enum": [
+          "observed_effect",
+          "established_mechanism",
+          "emerging_signal",
+          "conditional_pathway",
+          "not_shown"
+        ],
+        "title": "ClaimState",
+        "type": "string"
+      },
+      "ConceptRippleEdgeResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "certainty": {
+            "$ref": "#/components/schemas/Certainty"
+          },
+          "contested": {
+            "title": "Contested",
+            "type": "boolean"
+          },
+          "direction": {
+            "title": "Direction",
+            "type": "string"
+          },
+          "edge_id": {
+            "title": "Edge Id",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceResponse"
+            },
+            "minItems": 1,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "from_node": {
+            "title": "From Node",
+            "type": "string"
+          },
+          "hop": {
+            "maximum": 3.0,
+            "minimum": 1.0,
+            "title": "Hop",
+            "type": "integer"
+          },
+          "lag": {
+            "title": "Lag",
+            "type": "string"
+          },
+          "mechanism": {
+            "title": "Mechanism",
+            "type": "string"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "required_condition": {
+            "title": "Required Condition",
+            "type": "string"
+          },
+          "strength": {
+            "title": "Strength",
+            "type": "string"
+          },
+          "to_node": {
+            "title": "To Node",
+            "type": "string"
+          }
+        },
+        "required": [
+          "edge_id",
+          "from_node",
+          "to_node",
+          "direction",
+          "strength",
+          "lag",
+          "mechanism",
+          "required_condition",
+          "certainty",
+          "provenance",
+          "evidence",
+          "contested",
+          "hop"
+        ],
+        "title": "ConceptRippleEdgeResponse",
+        "type": "object"
+      },
+      "ConceptRippleResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "cached": {
+            "default": false,
+            "title": "Cached",
+            "type": "boolean"
+          },
+          "concept_slug": {
+            "title": "Concept Slug",
+            "type": "string"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/ConceptRippleEdgeResponse"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "max_depth": {
+            "title": "Max Depth",
+            "type": "integer"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/RippleNodeResponse"
+            },
+            "title": "Nodes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "concept_slug",
+          "max_depth",
+          "nodes",
+          "edges"
+        ],
+        "title": "ConceptRippleResponse",
+        "type": "object"
+      },
+      "EdgeDetailResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "certainty": {
+            "$ref": "#/components/schemas/Certainty"
+          },
+          "contested": {
+            "title": "Contested",
+            "type": "boolean"
+          },
+          "contested_views": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Contested Views",
+            "type": "array"
+          },
+          "direction": {
+            "title": "Direction",
+            "type": "string"
+          },
+          "edge_id": {
+            "title": "Edge Id",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceResponse"
+            },
+            "minItems": 1,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "from_node": {
+            "$ref": "#/components/schemas/RippleNodeResponse"
+          },
+          "lag": {
+            "title": "Lag",
+            "type": "string"
+          },
+          "mechanism": {
+            "title": "Mechanism",
+            "type": "string"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "required_condition": {
+            "title": "Required Condition",
+            "type": "string"
+          },
+          "strength": {
+            "title": "Strength",
+            "type": "string"
+          },
+          "to_node": {
+            "$ref": "#/components/schemas/RippleNodeResponse"
+          }
+        },
+        "required": [
+          "edge_id",
+          "from_node",
+          "to_node",
+          "direction",
+          "strength",
+          "lag",
+          "mechanism",
+          "required_condition",
+          "certainty",
+          "provenance",
+          "evidence",
+          "contested",
+          "contested_views"
+        ],
+        "title": "EdgeDetailResponse",
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponse",
+        "type": "object"
+      },
+      "EvidenceResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "directness": {
+            "title": "Directness",
+            "type": "string"
+          },
+          "evidence_id": {
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "publisher": {
+            "title": "Publisher",
+            "type": "string"
+          },
+          "source_type": {
+            "title": "Source Type",
+            "type": "string"
+          },
+          "supports": {
+            "title": "Supports",
+            "type": "boolean"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "url": {
+            "format": "uri",
+            "maxLength": 2083,
+            "minLength": 1,
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "title",
+          "url",
+          "publisher",
+          "source_type",
+          "directness",
+          "supports"
+        ],
+        "title": "EvidenceResponse",
+        "type": "object"
+      },
+      "FeedItemResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "domain": {
+            "title": "Domain",
+            "type": "string"
+          },
+          "fixture": {
+            "title": "Fixture",
+            "type": "boolean"
+          },
+          "headline": {
+            "title": "Headline",
+            "type": "string"
+          },
+          "origin_location": {
+            "title": "Origin Location",
+            "type": "string"
+          },
+          "prominence_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Prominence Reasons",
+            "type": "array"
+          },
+          "published_at": {
+            "format": "date-time",
+            "title": "Published At",
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/StorySourceResponse"
+            },
+            "title": "Sources",
+            "type": "array"
+          },
+          "story_id": {
+            "title": "Story Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "story_id",
+          "headline",
+          "published_at",
+          "origin_location",
+          "sources",
+          "domain",
+          "prominence_reasons",
+          "fixture"
+        ],
+        "title": "FeedItemResponse",
+        "type": "object"
+      },
+      "FeedResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/FeedItemResponse"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "FeedResponse",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "database": {
+            "title": "Database",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "database"
+        ],
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "Provenance": {
+        "enum": [
+          "curated",
+          "ai_suggested"
+        ],
+        "title": "Provenance",
+        "type": "string"
+      },
+      "RippleNodeResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "node_id": {
+            "title": "Node Id",
+            "type": "string"
+          },
+          "node_type": {
+            "title": "Node Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "node_id",
+          "label",
+          "node_type"
+        ],
+        "title": "RippleNodeResponse",
+        "type": "object"
+      },
+      "StoryDetailResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "domain": {
+            "title": "Domain",
+            "type": "string"
+          },
+          "entities": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Entities",
+            "type": "array"
+          },
+          "event_status": {
+            "title": "Event Status",
+            "type": "string"
+          },
+          "fixture": {
+            "title": "Fixture",
+            "type": "boolean"
+          },
+          "headline": {
+            "title": "Headline",
+            "type": "string"
+          },
+          "mapped_nodes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Mapped Nodes",
+            "type": "array"
+          },
+          "origin_location": {
+            "title": "Origin Location",
+            "type": "string"
+          },
+          "prominence_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Prominence Reasons",
+            "type": "array"
+          },
+          "published_at": {
+            "format": "date-time",
+            "title": "Published At",
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/StorySourceResponse"
+            },
+            "title": "Sources",
+            "type": "array"
+          },
+          "story_id": {
+            "title": "Story Id",
+            "type": "string"
+          },
+          "themes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Themes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "story_id",
+          "headline",
+          "published_at",
+          "origin_location",
+          "sources",
+          "domain",
+          "prominence_reasons",
+          "fixture",
+          "event_status",
+          "themes",
+          "entities",
+          "mapped_nodes"
+        ],
+        "title": "StoryDetailResponse",
+        "type": "object"
+      },
+      "StoryRippleEdgeResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "certainty": {
+            "$ref": "#/components/schemas/Certainty"
+          },
+          "certainty_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Certainty Reasons",
+            "type": "array"
+          },
+          "claim_state": {
+            "$ref": "#/components/schemas/ClaimState"
+          },
+          "condition_met": {
+            "title": "Condition Met",
+            "type": "boolean"
+          },
+          "contested": {
+            "title": "Contested",
+            "type": "boolean"
+          },
+          "direction": {
+            "title": "Direction",
+            "type": "string"
+          },
+          "edge_id": {
+            "title": "Edge Id",
+            "type": "string"
+          },
+          "event_status": {
+            "title": "Event Status",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceResponse"
+            },
+            "minItems": 1,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "from_node": {
+            "title": "From Node",
+            "type": "string"
+          },
+          "hop": {
+            "maximum": 3.0,
+            "minimum": 1.0,
+            "title": "Hop",
+            "type": "integer"
+          },
+          "lag": {
+            "title": "Lag",
+            "type": "string"
+          },
+          "mechanism": {
+            "title": "Mechanism",
+            "type": "string"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "publish": {
+            "title": "Publish",
+            "type": "boolean"
+          },
+          "required_condition": {
+            "title": "Required Condition",
+            "type": "string"
+          },
+          "story_id": {
+            "title": "Story Id",
+            "type": "string"
+          },
+          "strength": {
+            "title": "Strength",
+            "type": "string"
+          },
+          "to_node": {
+            "title": "To Node",
+            "type": "string"
+          }
+        },
+        "required": [
+          "edge_id",
+          "story_id",
+          "from_node",
+          "to_node",
+          "direction",
+          "strength",
+          "lag",
+          "mechanism",
+          "event_status",
+          "required_condition",
+          "condition_met",
+          "claim_state",
+          "certainty",
+          "certainty_reasons",
+          "provenance",
+          "evidence",
+          "contested",
+          "publish",
+          "hop"
+        ],
+        "title": "StoryRippleEdgeResponse",
+        "type": "object"
+      },
+      "StoryRippleResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "branches": {
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Branches",
+            "type": "array"
+          },
+          "cached": {
+            "default": false,
+            "title": "Cached",
+            "type": "boolean"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/StoryRippleEdgeResponse"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "fixture": {
+            "title": "Fixture",
+            "type": "boolean"
+          },
+          "main_path": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Main Path",
+            "type": "array"
+          },
+          "max_depth": {
+            "title": "Max Depth",
+            "type": "integer"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/RippleNodeResponse"
+            },
+            "title": "Nodes",
+            "type": "array"
+          },
+          "story_id": {
+            "title": "Story Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "story_id",
+          "fixture",
+          "max_depth",
+          "nodes",
+          "edges",
+          "main_path",
+          "branches"
+        ],
+        "title": "StoryRippleResponse",
+        "type": "object"
+      },
+      "StorySourceResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "excerpt": {
+            "title": "Excerpt",
+            "type": "string"
+          },
+          "outlet": {
+            "title": "Outlet",
+            "type": "string"
+          },
+          "paywalled": {
+            "title": "Paywalled",
+            "type": "boolean"
+          },
+          "url": {
+            "format": "uri",
+            "maxLength": 2083,
+            "minLength": 1,
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "outlet",
+          "url",
+          "excerpt",
+          "paywalled"
+        ],
+        "title": "StorySourceResponse",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Deterministic, evidence-backed causal explanations for energy news. This Milestone 1 API serves explicitly marked fixtures only.",
+    "title": "Ripple API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/concept/{node_slug}/ripples": {
+      "get": {
+        "operationId": "concept_ripples_concept__node_slug__ripples_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "node_slug",
+            "required": true,
+            "schema": {
+              "title": "Node Slug",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "depth",
+            "required": false,
+            "schema": {
+              "default": 2,
+              "maximum": 3,
+              "minimum": 1,
+              "title": "Depth",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConceptRippleResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Concept Ripples",
+        "tags": [
+          "ripples"
+        ]
+      }
+    },
+    "/edge/{edge_id}": {
+      "get": {
+        "operationId": "edge_edge__edge_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "edge_id",
+            "required": true,
+            "schema": {
+              "title": "Edge Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdgeDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Edge",
+        "tags": [
+          "evidence"
+        ]
+      }
+    },
+    "/feed": {
+      "get": {
+        "operationId": "feed_feed_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "domain",
+            "required": false,
+            "schema": {
+              "default": "energy",
+              "minLength": 1,
+              "title": "Domain",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Feed",
+        "tags": [
+          "stories"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/story/{story_id}": {
+      "get": {
+        "operationId": "story_story__story_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "story_id",
+            "required": true,
+            "schema": {
+              "title": "Story Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoryDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Story",
+        "tags": [
+          "stories"
+        ]
+      }
+    },
+    "/story/{story_id}/ripples": {
+      "get": {
+        "operationId": "story_ripples_story__story_id__ripples_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "story_id",
+            "required": true,
+            "schema": {
+              "title": "Story Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "depth",
+            "required": false,
+            "schema": {
+              "default": 2,
+              "maximum": 3,
+              "minimum": 1,
+              "title": "Depth",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoryRippleResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Story Ripples",
+        "tags": [
+          "ripples"
+        ]
+      }
+    }
+  }
+}
