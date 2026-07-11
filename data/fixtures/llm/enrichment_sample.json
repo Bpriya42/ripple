@@ -1,0 +1,38 @@
+{
+  "fixture": true,
+  "note": "Canned LLM responses for offline enrichment evaluation. These are illustrative fixtures, not production model output.",
+  "explanation_valid": {
+    "claim_state": "conditional_pathway",
+    "text": "If material disruption to Strait of Hormuz transit occurred, it could put upward pressure on oil prices, because the strait carries a large share of seaborne oil. No such disruption is confirmed at this time.",
+    "mentions_unmet_condition": true,
+    "excerpt_ids": ["source_12", "source_47"]
+  },
+  "faithfulness_valid": {
+    "sentences": [
+      {
+        "sentence": "If material disruption to Strait of Hormuz transit occurred, it could put upward pressure on oil prices, because the strait carries a large share of seaborne oil.",
+        "supported": true,
+        "supporting_excerpt_ids": ["source_12"],
+        "issues": []
+      },
+      {
+        "sentence": "No such disruption is confirmed at this time.",
+        "supported": true,
+        "supporting_excerpt_ids": ["source_47"],
+        "issues": []
+      }
+    ],
+    "all_supported": true
+  },
+  "faithfulness_unsupported": {
+    "sentences": [
+      {
+        "sentence": "Oil prices have already risen sharply because of the closure.",
+        "supported": false,
+        "supporting_excerpt_ids": [],
+        "issues": ["overstated", "unsupported", "asserts an outcome not in the excerpts"]
+      }
+    ],
+    "all_supported": false
+  }
+}

@@ -1,0 +1,55 @@
+# Render Blueprint for the Ripple backend.
+#
+# This provisions the FastAPI web service, the managed Postgres source of truth,
+# and the scheduled GDELT ingestion cron job. It contains NO secret values:
+# DATABASE_URL is injected from the managed database and FRONTEND_ORIGIN is set
+# per-environment in the Render dashboard. See docs/deployment.md for the runbook.
+
+databases:
+  - name: ripple-postgres
+    plan: free
+    databaseName: ripple
+    user: ripple
+
+services:
+  - type: web
+    name: ripple-api
+    runtime: python
+    plan: free
+    buildCommand: pip install uv && uv sync --project backend
+    preDeployCommand: uv run --project backend alembic -c backend/alembic.ini upgrade head
+    startCommand: uv run --project backend uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ripple-postgres
+          property: connectionString
+      # Comma-separated list of allowed browser origins (production + preview).
+      - key: FRONTEND_ORIGIN
+        sync: false
+      - key: GDELT_BASE_URL
+        value: https://api.gdeltproject.org/api/v2/doc/doc
+
+  - type: cron
+    name: ripple-ingest
+    runtime: python
+    plan: free
+    # Every 30 minutes; each run uses a unique timestamped key so the run ledger
+    # records a fresh, idempotent ingestion rather than skipping as duplicate.
+    schedule: "*/30 * * * *"
+    buildCommand: pip install uv && uv sync --project backend
+    startCommand: >-
+      uv run --project backend python -m app.jobs.ingest
+      --provider gdelt --run-key "gdelt-$(date -u +%Y%m%dT%H%M)"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ripple-postgres
+          property: connectionString
+      - key: GDELT_BASE_URL
+        value: https://api.gdeltproject.org/api/v2/doc/doc

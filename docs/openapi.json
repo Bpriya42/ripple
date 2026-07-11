@@ -775,7 +775,7 @@
     }
   },
   "info": {
-    "description": "Deterministic, evidence-backed causal explanations for energy news. This Milestone 1 API serves explicitly marked fixtures only.",
+    "description": "Deterministic, evidence-backed causal explanations for energy news. Stories may be explicitly marked fixtures or come from live GDELT ingestion; every displayed claim comes from the deterministic publication policy, never from a language model.",
     "title": "Ripple API",
     "version": "0.1.0"
   },

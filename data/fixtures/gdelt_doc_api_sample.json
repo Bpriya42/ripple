@@ -1,0 +1,62 @@
+{
+  "fixture": true,
+  "note": "Recorded GDELT 2.0 DOC API responses for offline tests. Not production data; every article URL is an illustrative fixture on gdelt.invalid.",
+  "queries": {
+    "ECON_OILPRICE": {
+      "articles": [
+        {
+          "url": "https://gdelt.invalid/oil-prices-weigh-supply-risk",
+          "title": "Oil prices climb as traders weigh possible supply risks",
+          "seendate": "20260711T101500Z",
+          "domain": "gdelt.invalid",
+          "language": "English",
+          "sourcecountry": "United Kingdom"
+        },
+        {
+          "url": "https://gdelt.invalid/strait-tankers-could-reroute",
+          "title": "Officials warn tankers could reroute around the strait",
+          "seendate": "20260711T090000Z",
+          "domain": "gdelt.invalid",
+          "language": "English",
+          "sourcecountry": "United States"
+        }
+      ]
+    },
+    "MARITIME_CHOKEPOINT": {
+      "articles": [
+        {
+          "url": "https://gdelt.invalid/strait-tankers-could-reroute",
+          "title": "Officials warn tankers could reroute around the strait",
+          "seendate": "20260711T090000Z",
+          "domain": "gdelt.invalid",
+          "language": "English",
+          "sourcecountry": "United States"
+        }
+      ]
+    },
+    "ENERGY_SECURITY": {
+      "articles": [
+        {
+          "url": "https://gdelt.invalid/grid-operators-flag-gas-concerns",
+          "title": "Grid operators flag possible gas supply concerns this winter",
+          "seendate": "20260711T080000Z",
+          "domain": "gdelt.invalid",
+          "language": "English",
+          "sourcecountry": "Germany"
+        }
+      ]
+    },
+    "MARITIME_INCIDENT": {
+      "articles": [
+        {
+          "url": "https://gdelt.invalid/cargo-ships-rerouted-after-strike",
+          "title": "Cargo ships rerouted after a port strike halts loading",
+          "seendate": "20260711T070000Z",
+          "domain": "gdelt.invalid",
+          "language": "English",
+          "sourcecountry": "Singapore"
+        }
+      ]
+    }
+  }
+}

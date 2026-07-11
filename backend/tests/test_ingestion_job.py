@@ -21,9 +21,9 @@ def test_mocked_gdelt_ingestion_is_idempotent() -> None:
         if story is not None:
             session.delete(story)
 
-    with Session(get_engine()) as session, session.begin():
+    with Session(get_engine()) as session:
         first = run_ingestion(session, provider, run_key)
-    with Session(get_engine()) as session, session.begin():
+    with Session(get_engine()) as session:
         second = run_ingestion(session, provider, run_key)
         count = len(session.scalars(select(Story).where(Story.slug == story_slug)).all())
 

@@ -19,9 +19,13 @@ class NormalizedStory(StrictModel):
     source_outlet: str
     source_url: HttpUrl
     source_excerpt: str
-    mapped_node: str
     event_status: str
     condition_met: bool
+    prominence_reasons: list[str]
+    fixture: bool
+    # ``mapped_node`` is optional: a live story that matches no curated node is
+    # persisted honestly with no ripple rather than being forced into a chain.
+    mapped_node: str | None = None
 
 
 class StoryProvider(Protocol):
@@ -72,6 +76,8 @@ class FixtureGdeltProvider:
                 mapped_node=article.mapped_node,
                 event_status=article.event_status,
                 condition_met=article.condition_met,
+                prominence_reasons=["fixture", "mocked scheduled ingestion"],
+                fixture=True,
             )
             for article in payload.articles
         ]

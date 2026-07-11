@@ -31,6 +31,9 @@ uv run --project backend python scripts/import_story_fixtures.py
 uv run --project backend python scripts/bootstrap_milestone1.py
 uv run --project backend python scripts/export_openapi.py
 uv run --project backend python -m app.jobs.ingest --run-key fixture-manual-v1
+uv run --project backend python -m app.jobs.ingest --provider gdelt --recorded data/fixtures/gdelt_doc_api_sample.json --run-key gdelt-recorded-smoke
+uv run --project backend python scripts/pull_gdelt_energy.py --dry-run
+uv run --project backend python scripts/explain_claim.py --demo
 uv run --project backend uvicorn app.main:app --reload
 uv run --project backend python scripts/ripple_from_headline.py --fixture threat_only_hormuz
 uv run --project backend python scripts/bootstrap_milestone0.py

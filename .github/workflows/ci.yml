@@ -44,6 +44,8 @@ jobs:
       - run: uv run --project backend ruff check backend/app backend/alembic backend/tests scripts
       - run: uv run --project backend mypy backend/app scripts
       - run: uv run --project backend pytest -v
+      # Offline proof of the live GDELT path (inspection only; does not persist).
+      - run: uv run --project backend python scripts/pull_gdelt_energy.py --dry-run
       - run: npm ci
         working-directory: frontend
       - run: npm run generate:api

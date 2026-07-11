@@ -23,6 +23,12 @@ def test_health(client: TestClient) -> None:
     assert response.json() == {"status": "ok", "database": "ok"}
 
 
+def test_cors_allows_configured_frontend_origin(client: TestClient) -> None:
+    response = client.get("/feed", headers={"Origin": "http://localhost:5173"})
+    assert response.status_code == 200
+    assert response.headers.get("access-control-allow-origin") == "http://localhost:5173"
+
+
 def test_feed_cursor_pagination(client: TestClient) -> None:
     first = client.get("/feed", params={"domain": "energy", "limit": 2})
     assert first.status_code == 200
