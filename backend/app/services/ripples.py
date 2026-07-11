@@ -36,7 +36,7 @@ def evidence_response(pair: tuple[EdgeEvidence, EvidenceSource]) -> EvidenceResp
 
 
 class RippleService:
-    CACHE_VERSION = "v1"
+    CACHE_VERSION = "v2"
 
     def __init__(
         self,
@@ -103,6 +103,7 @@ class RippleService:
                     certainty=decision.certainty,
                     certainty_reasons=list(decision.certainty_reasons),
                     provenance=Provenance(edge.provenance),
+                    high_impact=edge.high_impact,
                     evidence=[evidence_response(pair) for pair in edge_evidence],
                     contested=decision.contested,
                     publish=True,
@@ -162,6 +163,7 @@ class RippleService:
                     required_condition=edge.required_condition,
                     certainty=Certainty(edge.certainty),
                     provenance=Provenance(edge.provenance),
+                    high_impact=edge.high_impact,
                     evidence=[evidence_response(pair) for pair in edge_evidence],
                     contested=edge.contested,
                     hop=item.hop,
@@ -198,6 +200,7 @@ class RippleService:
             required_condition=edge.required_condition,
             certainty=Certainty(edge.certainty),
             provenance=Provenance(edge.provenance),
+            high_impact=edge.high_impact,
             evidence=[evidence_response(pair) for pair in edge_evidence],
             contested=edge.contested,
             contested_views=edge.contested_views,

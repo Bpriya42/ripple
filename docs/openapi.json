@@ -51,6 +51,10 @@
             "title": "From Node",
             "type": "string"
           },
+          "high_impact": {
+            "title": "High Impact",
+            "type": "boolean"
+          },
           "hop": {
             "maximum": 3.0,
             "minimum": 1.0,
@@ -92,6 +96,7 @@
           "required_condition",
           "certainty",
           "provenance",
+          "high_impact",
           "evidence",
           "contested",
           "hop"
@@ -176,6 +181,10 @@
           "from_node": {
             "$ref": "#/components/schemas/RippleNodeResponse"
           },
+          "high_impact": {
+            "title": "High Impact",
+            "type": "boolean"
+          },
           "lag": {
             "title": "Lag",
             "type": "string"
@@ -210,6 +219,7 @@
           "required_condition",
           "certainty",
           "provenance",
+          "high_impact",
           "evidence",
           "contested",
           "contested_views"
@@ -559,6 +569,10 @@
             "title": "From Node",
             "type": "string"
           },
+          "high_impact": {
+            "title": "High Impact",
+            "type": "boolean"
+          },
           "hop": {
             "maximum": 3.0,
             "minimum": 1.0,
@@ -613,6 +627,7 @@
           "certainty",
           "certainty_reasons",
           "provenance",
+          "high_impact",
           "evidence",
           "contested",
           "publish",

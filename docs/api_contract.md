@@ -18,7 +18,9 @@ return `400`; invalid depth values return `422`; missing resources return `404`.
 
 Every story-specific returned edge includes its story and event status,
 required condition, condition result, deterministic claim state and certainty
-reasons, provenance, evidence, contested status, and publication decision.
+reasons, provenance, high-impact classification, evidence, contested status,
+and publication decision. The high-impact flag is curated graph metadata used
+for deterministic disruption-severity presentation; it is not an event outcome.
 `not_shown`, unpublished, and evidence-free causal edges are excluded.
 
 All current feed records are explicitly marked fixtures. Source URLs under the

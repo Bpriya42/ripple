@@ -78,6 +78,7 @@ class StoryRippleEdgeResponse(ApiModel):
     certainty: Certainty
     certainty_reasons: list[str]
     provenance: Provenance
+    high_impact: bool
     evidence: list[EvidenceResponse] = Field(min_length=1)
     contested: bool
     publish: bool
@@ -106,6 +107,7 @@ class ConceptRippleEdgeResponse(ApiModel):
     required_condition: str
     certainty: Certainty
     provenance: Provenance
+    high_impact: bool
     evidence: list[EvidenceResponse] = Field(min_length=1)
     contested: bool
     hop: int = Field(ge=1, le=3)
@@ -130,6 +132,7 @@ class EdgeDetailResponse(ApiModel):
     required_condition: str
     certainty: Certainty
     provenance: Provenance
+    high_impact: bool
     evidence: list[EvidenceResponse] = Field(min_length=1)
     contested: bool
     contested_views: list[dict[str, object]]

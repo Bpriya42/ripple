@@ -6,11 +6,12 @@ engine. The canonical specification is [Master Build Plan.md](Master%20Build%20P
 and the implementation contract is
 [RIPPLE_COMPLETE_BUILD_HANDOFF.md](RIPPLE_COMPLETE_BUILD_HANDOFF.md).
 
-## Local backend
+## Local application
 
-Requirements: Python 3.12+, `uv`, Docker, and Docker Compose. Milestone 1 serves
-explicitly marked fixtures through the deterministic FastAPI backend; it does
-not perform live ingestion or invoke an LLM.
+Requirements: Python 3.12+, `uv`, Node.js 22+, Docker, and Docker Compose.
+Milestone 2 serves explicitly marked fixtures through the deterministic API and
+a desktop-first React explorer; it does not perform live ingestion or invoke an
+LLM.
 
 ```powershell
 Copy-Item .env.example .env
@@ -22,13 +23,14 @@ uv run --project backend uvicorn app.main:app --reload
 In another shell:
 
 ```powershell
-Invoke-RestMethod "http://127.0.0.1:8000/feed?domain=energy&limit=10"
-Invoke-RestMethod "http://127.0.0.1:8000/story/story.fixture.threat_only_hormuz/ripples"
-uv run --project backend pytest -v
+Push-Location frontend
+npm.cmd install
+npm.cmd run dev
+Pop-Location
 ```
 
-`bootstrap_milestone1.py` starts PostgreSQL, applies migrations, and
-idempotently imports the graph and story fixtures. The generated API contract
-is available at `/openapi.json` and checked in at `docs/openapi.json`.
+Open `http://127.0.0.1:5173`. The Vite development proxy keeps Milestone 2 local
+without introducing the production CORS and deployment work reserved for
+Milestone 3.
 
-See `docs/milestone_1.md` for the acceptance gate and cron-fixture command.
+See `docs/milestone_2.md` for the acceptance gate and complete test commands.

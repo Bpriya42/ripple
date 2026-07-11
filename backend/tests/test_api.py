@@ -74,6 +74,7 @@ def test_threat_only_story_ripples_are_conditional(client: TestClient) -> None:
     assert all(edge["event_status"] == "threat_only" for edge in first_hop)
     assert all(edge["condition_met"] is False for edge in first_hop)
     assert all(edge["claim_state"] == "conditional_pathway" for edge in first_hop)
+    assert all(isinstance(edge["high_impact"], bool) for edge in first_hop)
     assert all("required condition is not met" in edge["certainty_reasons"] for edge in first_hop)
     assert_no_unsupported_claims(payload)
 
@@ -115,6 +116,7 @@ def test_edge_detail_contains_immediate_evidence(client: TestClient) -> None:
     assert payload["evidence"]
     assert payload["required_condition"]
     assert payload["provenance"] == "curated"
+    assert payload["high_impact"] is True
     assert client.get("/edge/edge.missing").status_code == 404
 
 
