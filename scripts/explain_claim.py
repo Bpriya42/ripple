@@ -15,6 +15,7 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
+from app.core.dotenv import load_dotenv
 from app.schemas.graph import Certainty, ClaimState
 from app.services.reasoning.enrichment import generate_explanation
 from app.services.reasoning.provider import (
@@ -70,7 +71,9 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    load_dotenv(ROOT / ".env")
     provider = _demo_provider() if args.demo else default_provider()
+    print(f"# provider: {provider.name} (enabled={provider.enabled})")
     result = generate_explanation(provider, CLAIM, EXCERPTS)
     print(
         json.dumps(

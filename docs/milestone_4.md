@@ -25,10 +25,14 @@ provider is disabled, so Milestones 0–3 behave identically with no model calls
     supported by cited excerpts; otherwise suppresses.
 - Applicability over-claims are clamped to a safe state; the model can never
   report a met condition into publication.
-- Gemini adapter uses the Generative Language `generateContent` endpoint with a
-  JSON `responseSchema`, sends the key as a header (never the URL), refuses to
+- Gemini adapter targets the **Interactions API**
+  (`POST https://generativelanguage.googleapis.com/v1beta/interactions`) with a
+  JSON `response_format` schema, parses the output from `steps[].content[].text`,
+  sends the key as the `x-goog-api-key` header (never the URL), refuses to
   transmit the key inside prompt text, and sends only the supplied public
-  excerpts. Networking is injectable; tests never hit the network.
+  excerpts. Pydantic schemas are inlined to the accepted JSON-Schema subset
+  (`$defs`, `title`, `additionalProperties` stripped). Networking is injectable;
+  tests never hit the network.
 - An in-memory audit trace (provider, prompt version, steps, model claim state,
   faithfulness result) accompanies every result.
 - `scripts/explain_claim.py` demonstrates the pipeline (`--demo` runs it fully
@@ -60,17 +64,27 @@ Set in `.env` (local) or the Render dashboard (production):
 LLM_PROVIDER=gemini
 LLM_API_KEY=<your Google AI Studio key>   # never commit this
 LLM_MODEL=gemini-3.5-flash                 # override to any available model id
+LLM_BASE_URL=                              # optional; defaults to the public endpoint
 ```
 
-The key is read from the environment, never logged, and only public news and
-evidence excerpts are transmitted. With no key set, enrichment stays disabled.
+The `explain_claim.py` CLI loads `.env` automatically (shell/host environment
+still wins, so Render's injected variables are never overridden). Run a live
+call with:
+
+```powershell
+uv run --project backend python scripts/explain_claim.py
+```
+
+It prints the active provider (`gemini` once the key is set) and the published or
+suppressed result. The key is read from the environment, never logged, and only
+public news and evidence excerpts are transmitted. With no key set, enrichment
+stays disabled and the deterministic product is unchanged.
 
 ## Known follow-ups
 
-- The exact Gemini model id and `responseSchema` shape should be confirmed
-  against current Google documentation before relying on live calls; the adapter
-  is provider-neutral and the endpoint/model are environment-configurable.
 - Persisting enrichment results and traces to the database, and surfacing AI
   explanations in the API/frontend (behind the existing provenance labels),
   remain wiring steps; they are intentionally not prerequisites for the core
   product.
+- The model id is environment-configurable (`LLM_MODEL`); `gemini-3.5-flash` is
+  the documented free-tier default and can be pointed at any available model.

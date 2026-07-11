@@ -3,13 +3,14 @@ from typing import Any
 
 import pytest
 
-from app.services.reasoning.gemini import GeminiLlmProvider
+from app.services.reasoning.gemini import GeminiLlmProvider, inline_json_schema
 from app.services.reasoning.provider import (
     DisabledLlmProvider,
     LlmError,
     LlmRequest,
     default_provider,
 )
+from app.services.reasoning.schemas import Explanation
 
 API_KEY = "test-secret-key-value"
 
@@ -21,17 +22,26 @@ REQUEST = LlmRequest(
 )
 
 
+def _interaction(text: str) -> dict[str, Any]:
+    return {
+        "id": "v1_test",
+        "model": "gemini-3.5-flash",
+        "status": "completed",
+        "steps": [{"type": "model_output", "content": [{"type": "text", "text": text}]}],
+    }
+
+
 def _canned_transport(captured: dict[str, Any]):
     def transport(url: str, body: dict[str, Any], headers: dict[str, str]) -> dict[str, Any]:
         captured["url"] = url
         captured["body"] = body
         captured["headers"] = headers
-        return {"candidates": [{"content": {"parts": [{"text": json.dumps({"ok": True})}]}}]}
+        return _interaction(json.dumps({"ok": True}))
 
     return transport
 
 
-def test_gemini_builds_structured_request_and_parses_response() -> None:
+def test_gemini_builds_interactions_request_and_parses_response() -> None:
     captured: dict[str, Any] = {}
     provider = GeminiLlmProvider(
         api_key=API_KEY,
@@ -44,18 +54,29 @@ def test_gemini_builds_structured_request_and_parses_response() -> None:
     result = provider.complete_json(REQUEST)
     assert json.loads(result) == {"ok": True}
 
-    # Structured-output request shape.
-    assert captured["url"].endswith("/v1beta/models/gemini-3.5-flash:generateContent")
-    assert captured["body"]["generationConfig"]["responseMimeType"] == "application/json"
-    assert captured["body"]["generationConfig"]["responseSchema"] == {"type": "object"}
+    # Interactions API request shape.
+    assert captured["url"] == "https://generativelanguage.googleapis.com/v1beta/interactions"
+    assert captured["body"]["model"] == "gemini-3.5-flash"
+    assert captured["body"]["response_format"]["mime_type"] == "application/json"
+    assert captured["body"]["response_format"]["type"] == "text"
+    # The verbatim system contract is delivered inside the input.
+    assert "Return only the required JSON schema." in captured["body"]["input"]
+    assert "source_12" in captured["body"]["input"]
 
-    # Data boundary: key travels in a header, never in the URL, and only the
-    # provided public excerpt text is sent.
+    # Data boundary: key travels in a header, never in the URL or the body.
     assert captured["headers"]["x-goog-api-key"] == API_KEY
     assert API_KEY not in captured["url"]
-    user_text = captured["body"]["contents"][0]["parts"][0]["text"]
-    assert "source_12" in user_text
     assert API_KEY not in json.dumps(captured["body"])
+
+
+def test_inline_json_schema_resolves_enum_defs() -> None:
+    schema = Explanation.model_json_schema()
+    inlined = inline_json_schema(schema)
+    assert "$defs" not in inlined
+    # The ClaimState enum is inlined as a concrete list of allowed values.
+    claim_state = inlined["properties"]["claim_state"]
+    assert "conditional_pathway" in claim_state.get("enum", [])
+    assert "$ref" not in json.dumps(inlined)
 
 
 def test_gemini_refuses_to_send_the_api_key_in_prompt_text() -> None:
@@ -75,12 +96,12 @@ def test_gemini_refuses_to_send_the_api_key_in_prompt_text() -> None:
         provider.complete_json(leaking)
 
 
-def test_gemini_raises_on_empty_candidates() -> None:
+def test_gemini_raises_on_empty_steps() -> None:
     provider = GeminiLlmProvider(
         api_key=API_KEY,
         model="m",
         base_url="https://x",
-        transport=lambda url, body, headers: {"candidates": []},
+        transport=lambda url, body, headers: {"status": "completed", "steps": []},
     )
     with pytest.raises(LlmError):
         provider.complete_json(REQUEST)

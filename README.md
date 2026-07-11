@@ -50,8 +50,9 @@ uv run --project backend python -m app.jobs.ingest --provider gdelt --recorded d
 ```
 
 Omit `--recorded` to fetch live from GDELT (no API key required). See
-`docs/milestone_3.md` for the acceptance gate and `docs/deployment.md` for the
-Render + Vercel deployment runbook.
+`docs/milestone_3.md` for the acceptance gate, `docs/deployment.md` for the
+Render + Vercel deployment runbook, and `docs/cicd.md` for the CI/CD pipeline
+(gated deploy on `main`).
 
 ## LLM enrichment (Milestone 4)
 
