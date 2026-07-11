@@ -1,0 +1,20 @@
+{
+  "threat_only_hormuz": {
+    "fixture": true,
+    "id": "story.fixture.threat_only_hormuz",
+    "headline": "Fixture: officials threaten to close the Strait of Hormuz",
+    "event_status": "threat_only",
+    "mapped_node": "event.hormuz_disruption",
+    "condition_met": false,
+    "direct_outcome_evidence": false
+  },
+  "confirmed_hormuz_disruption": {
+    "fixture": true,
+    "id": "story.fixture.confirmed_hormuz_disruption",
+    "headline": "Fixture: material disruption to Hormuz transit is confirmed",
+    "event_status": "disruption_confirmed",
+    "mapped_node": "event.hormuz_disruption",
+    "condition_met": true,
+    "direct_outcome_evidence": false
+  }
+}
