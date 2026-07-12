@@ -1,0 +1,25 @@
+name: ingest
+
+on:
+  schedule:
+    # Every 30 minutes, matching the cadence originally defined for the Render
+    # cron job. See docs/cicd.md for why this runs on GitHub Actions instead.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  gdelt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.7.17"
+      - run: uv sync --project backend
+      - name: Run GDELT ingestion against production database
+        env:
+          DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+          GDELT_BASE_URL: https://api.gdeltproject.org/api/v2/doc/doc
+        run: |
+          uv run --project backend python -m app.jobs.ingest \
+            --provider gdelt --run-key "gdelt-$(date -u +%Y%m%dT%H%M)"

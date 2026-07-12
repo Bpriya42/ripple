@@ -59,6 +59,18 @@ This is what actually enforces the gate: without it, someone can push straight
 to `main` and the `deploy` job still runs after CI passes, but nothing stopped
 the push itself.
 
+### 5. Ingestion secret
+`.github/workflows/ingest.yml` runs the GDELT ingestion job on a `*/30 * * * *`
+schedule — this replaces a Render cron service, since Render has no free cron
+tier (metered, ~$1/month minimum). It needs one secret:
+
+| Name | Value |
+|---|---|
+| `PROD_DATABASE_URL` | the **External Database URL** from Render's `ripple-postgres` → Connect (not the internal `fromDatabase` host, which is unreachable from outside Render) |
+
+See [deployment.md](deployment.md#scheduled-ingestion-github-actions) for the
+full walkthrough.
+
 ## Runtime secrets (application, not CI)
 
 These are set directly on Render/Vercel, never in GitHub Actions:

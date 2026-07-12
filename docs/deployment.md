@@ -1,33 +1,52 @@
 # Deployment runbook
 
-Ripple deploys the FastAPI backend, managed Postgres, and the scheduled GDELT
-ingestion job to **Render** (via `render.yaml`), and the React SPA to **Vercel**
-(via `frontend/vercel.json`). No secret values live in the repository; every
-credential is supplied through the hosting dashboards.
+Ripple deploys the FastAPI backend and managed Postgres to **Render** (via
+`render.yaml`), the React SPA to **Vercel** (via `frontend/vercel.json`), and
+runs the scheduled GDELT ingestion job on **GitHub Actions** (via
+`.github/workflows/ingest.yml`) rather than a Render cron service — see
+[cicd.md](cicd.md) for why. No secret values live in the repository; every
+credential is supplied through the hosting dashboards or GitHub Actions
+secrets.
 
 ## Prerequisites
 
-- A Render account and a Vercel account.
-- This repository pushed to a Git remote both platforms can read.
+- A Render account, a Vercel account, and this repository pushed to a Git
+  remote both platforms (and GitHub Actions) can read.
 - No API keys are required for Milestone 3. GDELT is free and needs no key. The
   Gemini `LLM_*` variables are introduced in Milestone 4 and stay unset here.
 
-## Backend + database + cron (Render)
+## Backend + database (Render)
 
 1. In Render, choose **New → Blueprint** and point it at this repository. Render
-   reads `render.yaml` and provisions three resources: `ripple-postgres`
-   (database), `ripple-api` (web service), and `ripple-ingest` (cron job).
+   reads `render.yaml` and provisions two resources: `ripple-postgres`
+   (database) and `ripple-api` (web service).
 2. `DATABASE_URL` is wired automatically from `ripple-postgres`. The backend
    normalizes the `postgresql://` URL to the psycopg 3 driver at runtime.
 3. Set `FRONTEND_ORIGIN` on `ripple-api` to your Vercel origin(s), comma
    separated, e.g. `https://ripple.vercel.app,https://ripple-preview.vercel.app`.
    This is the CORS allow-list; the frontend never receives backend secrets.
-4. The web service runs Alembic migrations in its pre-deploy step and exposes
-   `/health` for Render's health check.
-5. `ripple-ingest` runs every 30 minutes with a unique timestamped run key, so
-   each tick performs a fresh, idempotent ingestion recorded in
-   `ingestion_runs`. A failed tick is recorded as `failed`; the next tick
-   recovers on its own key.
+4. Free-tier web services can't run a separate pre-deploy step, so Alembic
+   migrations run as the first part of the start command on every boot
+   (`upgrade head` is idempotent). The service exposes `/health` for Render's
+   health check.
+
+## Scheduled ingestion (GitHub Actions)
+
+Render has no free tier for cron jobs (metered, ~$1/month minimum), so the
+30-minute GDELT ingestion tick runs as a GitHub Actions scheduled workflow
+instead, at zero extra cost:
+
+1. In Render, open `ripple-postgres` → **Connect** → copy the **External
+   Database URL** (not the internal one used by `fromDatabase` — that host is
+   only reachable from inside Render's network).
+2. In GitHub: repo → **Settings → Secrets and variables → Actions** → add
+   `PROD_DATABASE_URL` with that external URL.
+3. `.github/workflows/ingest.yml` runs on a `*/30 * * * *` schedule (and via
+   manual **Run workflow** dispatch), executing the same idempotent ingestion
+   job the Render cron would have, against your production database.
+4. Each tick uses a fresh timestamped run key, so it's recorded independently
+   in `ingestion_runs`; a `failed` row is followed by a later `succeeded` row
+   on the next tick.
 
 ## Frontend (Vercel)
 
@@ -42,8 +61,9 @@ credential is supplied through the hosting dashboards.
 ## Verifying a staging deployment (Milestone 3 gate)
 
 1. `GET https://<ripple-api>/health` returns `{"status":"ok","database":"ok"}`.
-2. Trigger `ripple-ingest` once (Render → the cron job → **Run now**). It should
-   finish `succeeded` with a non-zero `records_seen`.
+2. Trigger the ingestion workflow once (GitHub → Actions → `ingest` →
+   **Run workflow**). It should finish `succeeded` with a non-zero
+   `records_seen`.
 3. `GET https://<ripple-api>/feed?domain=energy` returns live, non-fixture
    stories with transparent prominence reasons.
 4. Open a story in the Vercel app; the Explorer loads a cached ripple response

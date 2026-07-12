@@ -1,9 +1,13 @@
 # Render Blueprint for the Ripple backend.
 #
-# This provisions the FastAPI web service, the managed Postgres source of truth,
-# and the scheduled GDELT ingestion cron job. It contains NO secret values:
-# DATABASE_URL is injected from the managed database and FRONTEND_ORIGIN is set
-# per-environment in the Render dashboard. See docs/deployment.md for the runbook.
+# This provisions the FastAPI web service and the managed Postgres source of
+# truth. It contains NO secret values: DATABASE_URL is injected from the
+# managed database and FRONTEND_ORIGIN is set per-environment in the Render
+# dashboard. See docs/deployment.md for the runbook.
+#
+# GDELT ingestion runs on a schedule via a GitHub Actions workflow
+# (.github/workflows/ingest.yml) rather than a Render cron service, because
+# Render has no free tier for cron jobs. See docs/cicd.md.
 
 databases:
   - name: ripple-postgres
@@ -17,8 +21,11 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install uv && uv sync --project backend
-    preDeployCommand: uv run --project backend alembic -c backend/alembic.ini upgrade head
-    startCommand: uv run --project backend uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    # Free-tier web services can't run a separate pre-deploy step, so the
+    # (idempotent) migration runs as part of every boot instead.
+    startCommand: >-
+      uv run --project backend alembic -c backend/alembic.ini upgrade head &&
+      uv run --project backend uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
@@ -30,26 +37,5 @@ services:
       # Comma-separated list of allowed browser origins (production + preview).
       - key: FRONTEND_ORIGIN
         sync: false
-      - key: GDELT_BASE_URL
-        value: https://api.gdeltproject.org/api/v2/doc/doc
-
-  - type: cron
-    name: ripple-ingest
-    runtime: python
-    plan: free
-    # Every 30 minutes; each run uses a unique timestamped key so the run ledger
-    # records a fresh, idempotent ingestion rather than skipping as duplicate.
-    schedule: "*/30 * * * *"
-    buildCommand: pip install uv && uv sync --project backend
-    startCommand: >-
-      uv run --project backend python -m app.jobs.ingest
-      --provider gdelt --run-key "gdelt-$(date -u +%Y%m%dT%H%M)"
-    envVars:
-      - key: PYTHON_VERSION
-        value: "3.12"
-      - key: DATABASE_URL
-        fromDatabase:
-          name: ripple-postgres
-          property: connectionString
       - key: GDELT_BASE_URL
         value: https://api.gdeltproject.org/api/v2/doc/doc
