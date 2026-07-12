@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://REPLACE_WITH_RENDER_API_HOST/:path*"
+      "destination": "https://ripple-api-8ff1.onrender.com/:path*"
     }
   ]
 }
